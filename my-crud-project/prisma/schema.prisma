@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://postgres:Boonatuna1128%3F%21@localhost:5432/Shopping%20Store"
+}
+
+model Customer {
+  customerid Int     @id @default(autoincrement())
+  firstname  String  @db.VarChar(50)
+  lastname   String  @db.VarChar(50)
+  email      String  @unique @db.VarChar(100)
+  orders     Order[]
+}
+
+model Order {
+  orderid    Int           @id @default(autoincrement())
+  customerid Int
+  orderdate  DateTime
+  status     String        @db.VarChar(20)
+  customer   Customer      @relation(fields: [customerid], references: [customerid])
+  orderdetails OrderDetail[]
+}
+
+model Product {
+  productid   Int           @id @default(autoincrement())
+  productname String        @db.VarChar(100)
+  price       Decimal       @db.Decimal(10, 2)
+  category    String        @db.VarChar(50)
+  orderdetails OrderDetail[]
+}
+
+model OrderDetail {
+  orderdetailid Int      @id @default(autoincrement())
+  orderid       Int
+  productid     Int
+  quantity      Int
+
+  order   Order   @relation(fields: [orderid], references: [orderid])
+  product Product @relation(fields: [productid], references: [productid])
+}
