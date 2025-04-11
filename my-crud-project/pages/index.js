@@ -4,27 +4,43 @@ export default function HomePage() {
   // States for Customers, Orders, OrderDetails, and Products
   const [customers, setCustomers] = useState([]);
   const [orders, setOrders] = useState([]);
-  const [orderDetails, setOrderDetails] = useState([]);
+  const [orderDetails, setOrderDetails] = useState([]); // Ensure this is an array
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true); // Add a loading state
 
   // Fetch data when the page loads
   useEffect(() => {
     async function fetchData() {
-      const customersRes = await fetch('/api/customers');
-      const customersData = await customersRes.json();
-      setCustomers(customersData);
+      try {
+        const customersRes = await fetch('/api/customers');
+        const customersData = await customersRes.json();
+        setCustomers(customersData);
 
-      const ordersRes = await fetch('/api/orders');
-      const ordersData = await ordersRes.json();
-      setOrders(ordersData);
+        const ordersRes = await fetch('/api/orders');
+        const ordersData = await ordersRes.json();
+        setOrders(ordersData);
 
-      const orderDetailsRes = await fetch('/api/orderdetails');
-      const orderDetailsData = await orderDetailsRes.json();
-      setOrderDetails(orderDetailsData);
+        const orderDetailsRes = await fetch('/api/orderdetails');
+        const orderDetailsData = await orderDetailsRes.json();
 
-      const productsRes = await fetch('/api/products');
-      const productsData = await productsRes.json();
-      setProducts(productsData);
+        // Validate data type before updating state
+        if (Array.isArray(orderDetailsData)) {
+          setOrderDetails(orderDetailsData);
+        } else {
+          console.error('Expected orderDetailsData to be an array:', orderDetailsData);
+          setOrderDetails([]); // Fallback in case of unexpected data structure
+        }
+
+        const productsRes = await fetch('/api/products');
+        const productsData = await productsRes.json();
+        setProducts(productsData);
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setOrderDetails([]); // Fallback for orderDetails in case of fetch failure
+      } finally {
+        setLoading(false); // Stop loading after data is fetched
+      }
     }
     fetchData();
   }, []);
@@ -168,14 +184,20 @@ export default function HomePage() {
       {/* OrderDetails Section */}
       <section>
         <h2>Order Details</h2>
-        <ul>
-          {orderDetails.map(orderDetail => (
-            <li key={orderDetail.orderdetailid}>
-              Order #{orderDetail.orderid} - Product #{orderDetail.productid} - Quantity: {orderDetail.quantity}
-              <button onClick={() => deleteOrderDetail(orderDetail.orderdetailid)}>Delete</button>
-            </li>
-          ))}
-        </ul>
+        {loading ? (
+          <p>Loading order details...</p>
+        ) : orderDetails.length > 0 ? (
+          <ul>
+            {orderDetails.map(orderDetail => (
+              <li key={orderDetail.orderdetailid}>
+                Order #{orderDetail.orderid} - Product #{orderDetail.productid} - Quantity: {orderDetail.quantity}
+                <button onClick={() => deleteOrderDetail(orderDetail.orderdetailid)}>Delete</button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No order details found.</p>
+        )}
         <form
           onSubmit={e => {
             e.preventDefault();
@@ -227,3 +249,4 @@ export default function HomePage() {
     </div>
   );
 }
+
