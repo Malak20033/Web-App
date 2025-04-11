@@ -1,10 +1,21 @@
 const { Pool } = require('pg');
 require('dotenv').config({ path: 'C:\\Users\\malak\\project-1-web-app-Malak20033\\my-crud-project\\.env' });
 
-console.log("Database URL:", process.env.DATABASE_URL); // Add this line to debug the environment variable.
+let pool;
 
-const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-});
+try {
+    // Initialize the database connection pool
+    pool = new Pool({
+        connectionString: process.env.DATABASE_URL,
+    });
+    console.log("Database pool initialized successfully!");
+} catch (err) {
+    // Catch and log any errors during initialization
+    console.error("Error initializing database pool:", err.message);
+    process.exit(1); // Exit the app if the database connection fails
+}
 
-module.exports = pool;
+// Export the query method for cleaner usage in other files
+module.exports = {
+    query: (text, params) => pool.query(text, params),
+};
