@@ -212,7 +212,7 @@ export default function HomePage() {
             <button type="submit">{editOrderData ? 'Save Changes' : 'Add Order'}</button>
             <button type="button" onClick={() => hideForm(setShowOrderForm, setEditOrderData)}>Cancel</button>
           </form>
-        )}
+        )} 
       </section>
 
       {/* Order Details Section */}
