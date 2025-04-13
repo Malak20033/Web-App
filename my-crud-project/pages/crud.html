@@ -1,24 +1,52 @@
 <div style="width: 80%; margin: 20px auto; font-family: Arial, sans-serif;">
-    <h2 style="text-align: center;">Customer Table</h2>
-    <table style="border-collapse: collapse; width: 100%; border: 1px solid #ddd;">
-      <thead style="background-color: #f4f4f4;">
-        <tr>
-          <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">ID</th>
-          <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Name</th>
-          <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Email</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td style="border: 1px solid #ddd; padding: 8px;">1</td>
-          <td style="border: 1px solid #ddd; padding: 8px;">John Doe</td>
-          <td style="border: 1px solid #ddd; padding: 8px;">john.doe@example.com</td>
-        </tr>
-        <tr>
-          <td style="border: 1px solid #ddd; padding: 8px;">2</td>
-          <td style="border: 1px solid #ddd; padding: 8px;">Jane Smith</td>
-          <td style="border: 1px solid #ddd; padding: 8px;">jane.smith@example.com</td>
-        </tr>
-      </tbody>
-    </table>
+  <h2 style="text-align: center;">Customer Table</h2>
+  <!-- Create Button -->
+  <button style="margin-bottom: 10px;" onClick="showCreateForm()">Add New Customer</button>
+  
+  <!-- Table -->
+  <table style="border-collapse: collapse; width: 100%; border: 1px solid #ddd;">
+    <thead style="background-color: #f4f4f4;">
+      <tr>
+        <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">ID</th>
+        <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Name</th>
+        <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Email</th>
+        <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="border: 1px solid #ddd; padding: 8px;">1</td>
+        <td style="border: 1px solid #ddd; padding: 8px;">John Doe</td>
+        <td style="border: 1px solid #ddd; padding: 8px;">john.doe@example.com</td>
+        <td style="border: 1px solid #ddd; padding: 8px;">
+          <button onClick="editCustomer(1)">Edit</button>
+          <button onClick="deleteCustomer(1)">Delete</button>
+        </td>
+      </tr>
+      <tr>
+        <td style="border: 1px solid #ddd; padding: 8px;">2</td>
+        <td style="border: 1px solid #ddd; padding: 8px;">Jane Smith</td>
+        <td style="border: 1px solid #ddd; padding: 8px;">jane.smith@example.com</td>
+        <td style="border: 1px solid #ddd; padding: 8px;">
+          <button onClick="editCustomer(2)">Edit</button>
+          <button onClick="deleteCustomer(2)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Create Form -->
+  <div id="createForm" style="display: none; margin-top: 20px;">
+    <form
+      onSubmit="createCustomer(event)"
+      style="border: 1px solid #ddd; padding: 20px; background-color: #f9f9f9;"
+    >
+      <h3>Add New Customer</h3>
+      <input name="firstname" placeholder="First Name" required style="margin-bottom: 10px;" />
+      <input name="lastname" placeholder="Last Name" required style="margin-bottom: 10px;" />
+      <input name="email" placeholder="Email" required style="margin-bottom: 10px;" />
+      <button type="submit">Submit</button>
+      <button type="button" onClick="hideCreateForm()">Cancel</button>
+    </form>
   </div>
+</div>
